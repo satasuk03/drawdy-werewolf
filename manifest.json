@@ -1,0 +1,8 @@
+{
+    "driverId": "satasuk.werewolf",
+    "driverName": "Werewolf",
+    "driverVersion": "0.1.0",
+    "description": "Play Werewolf with everyone on the board: secret roles, night powers, day votes, and a village chat that the dead cannot join. In English, Thai, and Chinese.",
+    "main": "main.js",
+    "permissions": ["dom", "scene", "storage", "collaboration"]
+}
