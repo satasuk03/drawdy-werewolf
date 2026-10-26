@@ -1,35 +1,37 @@
 # Werewolf for Drawdy
 
-Play Werewolf with everyone on your board. Each player gets a secret role card. The wolves hunt at night, the village argues and votes by day, and the dead stay silent.
-
-Install the extension, click the wolf icon in the toolbar, and press **Gather the village**. Everyone else on the board clicks the same icon and takes a seat.
+A party game of lies, hunches, and accusations, played right on your Drawdy board with friends.
 
 ![The vote, on a desktop panel](assets/vote-wide.png)
 
-## How to use
+## What is this game?
 
-1. **Gather.** One person opens the panel and presses **Gather the village**. A table appears on the board. That person is the host, and their browser runs the game, so they should keep the board open until the game ends.
-2. **Take a seat.** Everyone else opens the panel and presses **Take a seat**. The host picks the deck (it follows the player count until edited), the pace, and whether they play or only narrate. Then the host presses **Deal the cards**.
-3. **Night.** Your role card flips over. Wolves choose a victim together and can whisper in the Pack chat. The Seer reads one player, the Doctor shields one, and then the Witch may heal the victim or poison someone.
-4. **Day.** The dead are revealed at dawn. Talk in the Village Square. When everyone is ready, or time runs out, the vote opens. A player is exiled only with more votes than any other choice, skip included.
-5. **The end.** The village wins when every wolf is gone. The wolves win when they equal the villagers. Every card is turned over.
+Werewolf is a classic social deduction game. A few players are secretly **werewolves** hiding among the **villagers**. Nobody knows who is who, except the wolves, who know each other.
 
-| Role | Team | Power |
-| ---- | ---- | ----- |
-| Werewolf | Wolves | Each night, agree with the pack on a victim. |
-| Villager | Village | None. Find the wolves. |
-| Seer | Village | Each night, learn whether one player is a werewolf. |
-| Doctor | Village | Each night, protect one player. Not the same player twice in a row. |
-| Witch | Village | One healing potion and one poison, each usable once per game. |
-| Hunter | Village | When they die, they shoot one player. |
+The game switches between two phases:
 
-| Interaction | What happens |
-| ----------- | ------------ |
-| Tap a player, then confirm | Submits your night action or vote. Wolves, the Doctor, and voters can change their choice until the phase ends. |
-| Village Square | Open to living players by day and in the lobby. It is closed at night and to the dead. |
-| Pack chat | Only wolves can read it, and only at night. |
-| Skip timer / End game | Host only. |
-| Dying | You see every role, but you can no longer talk. |
+- **Night 🌙** Everyone's eyes are "closed". The wolves quietly pick someone to attack. Villagers with special powers use them in secret.
+- **Day ☀️** The village wakes up and finds out who died. Everyone talks, argues, and points fingers, then votes to exile the person they think is a wolf.
+
+**The village wins** if they find and exile every wolf.
+**The wolves win** if they survive until there are as many wolves as villagers.
+
+The fun is in the talking: wolves have to lie convincingly, and villagers have to figure out who is lying.
+
+## Who can you be?
+
+When the game starts, each player gets a secret role card. Only you can see yours.
+
+| Role | Side | What you do |
+| ---- | ---- | ----------- |
+| 🐺 Werewolf | Wolves | Each night, agree with the other wolves on someone to attack. By day, blend in. |
+| 🧑‍🌾 Villager | Village | No special power. Listen carefully, and vote out the wolves. |
+| 🔮 Seer | Village | Each night, secretly learn whether one player is a werewolf. |
+| 🩺 Doctor | Village | Each night, protect one player from the wolves (not the same one twice in a row). |
+| 🧪 Witch | Village | Has one potion to save a victim and one poison to kill someone, each usable once. |
+| 🏹 Hunter | Village | When the Hunter dies, they take one player down with them. |
+
+Once you die, you can watch everything and see everyone's role, but you can't talk anymore. No hints from beyond the grave!
 
 <p>
 <img src="assets/night-wolf-phone.png" width="260" alt="A wolf choosing prey on a phone">
@@ -37,48 +39,33 @@ Install the extension, click the wolf icon in the toolbar, and press **Gather th
 <img src="assets/dead-chat-phone.png" width="260" alt="A dead player's closed chat">
 </p>
 
-## Languages
+## How to play
 
-The game speaks English, Thai (ไทย), and Simplified Chinese (中文). Each player picks their own language from the globe button in the panel header. The first time, it follows the browser's language, and the choice is remembered on that device. Events such as deaths and votes are stored as data and worded in each player's language, so a Thai player and an English player at the same table each read the story in their own language. The shared table on the board, including the card banners, uses the host's language. Chat messages appear exactly as players typed them.
+You need **4 to 16 players**, all on the same Drawdy board, each with the Werewolf extension installed.
+
+1. **One person starts the game.** Click the wolf icon in the toolbar and press **Gather the village**. A game table appears on the board. This person is the host and should keep the board open until the game ends.
+2. **Everyone else joins.** Click the same wolf icon and press **Take a seat**.
+3. **The host deals.** The host can adjust the roles and the pace, and can choose to just narrate instead of playing. Then press **Deal the cards**.
+4. **Play!** Your role card flips over, and the first night begins. Follow the prompts on your screen: tap a player to choose, then confirm.
+5. **Game over.** When one side wins, every card is turned over so everyone can see who was who.
+
+Works on phones and computers. There's a village chat for daytime arguing, and a private chat only the wolves can see at night.
+
+## Play in your language
+
+The game speaks **English**, **ไทย (Thai)**, and **中文 (Chinese)**. Each player picks their own language with the globe button, so friends can play together in different languages.
 
 <p>
 <img src="assets/witch-phone-th.png" width="260" alt="The witch's turn in Thai">
 <img src="assets/vote-wide-zh.png" width="520" alt="The vote in Chinese">
 </p>
 
-## How it works
+## Is it fair?
 
-Drivers on different machines can only talk through the board, so every piece of game data is a small invisible element inside the Werewolf frame. The host's driver runs the rules. Players' drivers write their seat, actions, and messages.
-
-- **Secrets stay secret.** Roles, night actions, and the wolves' chat are encrypted with keys shared only between each player and the host (X25519 and ChaCha20-Poly1305, implemented in `src/primitives.ts` because Drawdy's driver worker has no Web Crypto). Every sealed box is padded to a fixed size, and actions and pack messages carry no names, so element data doesn't reveal who acts at night or who the wolves are.
-- **The dead cannot speak.** The panel closes the chat for dead players. The host also accepts a message only if its sender was allowed to speak when it was sent, and every client shows only accepted messages. Each message carries a code only its author and the host can produce, and each player's keys are pinned when they sit down. A modified driver can't speak for the dead or post under someone else's name.
-- **The host sees all.** The host's browser knows every role, because it runs the game, and it stamps every game state with a per-player code so nobody else can rewrite it. Choose a host everyone trusts, or let the host narrate instead of playing.
-- **Reloading.** Reopen the panel after a reload to rejoin. Your keys are kept in the extension's storage on that device.
-
-The board shows a shared table with each player's card (face down until they die), and the Village Square log.
+Yes. Roles and night actions are encrypted, so other players can't peek, and dead players really can't sneak messages into the chat. The only person whose computer knows every role is the host, because it runs the game. Pick a host everyone trusts, or let the host narrate instead of playing.
 
 ![The table on the board](assets/board.png)
 
-## Permissions
+---
 
-| Permission | Why |
-| ---------- | --- |
-| `dom` | The toolbar button, the context menu entry, and the game panel. |
-| `scene` | The table and the game's hidden records on the board. |
-| `storage` | Your encryption keys on this device, so a reload can rejoin the game. |
-| `collaboration` | Players' names and colors, and who is online. |
-
-## Development
-
-```bash
-npm install
-npm run dev        # dev server for Drawdy's "Add extension dev server"
-npm test           # rule tests plus full games across simulated players
-npm run build      # rebuilds src/webview-html.ts, then dist/satasuk-werewolf.drawdyx
-```
-
-The panel lives in `webview/` and is inlined into `src/webview-html.ts` by `npm run build:webview`. Commit the generated file, because Drawdy builds only `src/`. `node scripts/screens.mjs <dir>` plays a scripted game and screenshots every screen at phone and desktop sizes.
-
-## Credits
-
-Card art is original SVG, drawn for this extension.
+Card art is original, drawn for this game. Developers: see [DEVELOPMENT.md](DEVELOPMENT.md) for how it works, permissions, and build steps.
